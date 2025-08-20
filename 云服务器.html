@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星辰云服务器租用平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --secondary: #4285f4;
+            --accent: #34a853;
+            --warning: #fbbc05;
+            --danger: #ea4335;
+            --light: #f8f9fa;
+            --dark: #202124;
+            --gray: #5f6368;
+            --border: #dadce0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* 导航栏样式 */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin: 0 15px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--gray);
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background-color: rgba(26, 115, 232, 0.1);
+        }
+        
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            outline: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            margin-right: 10px;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        /* 主内容区样式 */
+        .main-content {
+            padding: 30px 0;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        /* 卡片样式 */
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        /* 服务器配置区域 */
+        .config-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .option-group {
+            margin-bottom: 15px;
+        }
+        
+        .option-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--gray);
+        }
+        
+        .select-box {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: white;
+            font-size: 14px;
+        }
+        
+        .price-display {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .price {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+        
+        /* 标签页样式 */
+        .tabs {
+            display: flex;
+            list-style: none;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab-item.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        textarea.form-input {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* 活动卡片 */
+        .promo-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .promo-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            height: 160px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px;
+        }
+        
+        .promo-card:nth-child(2) {
+            background: linear-gradient(135deg, var(--accent), #2cc76a);
+        }
+        
+        .promo-card:nth-child(3) {
+            background: linear-gradient(135deg, var(--warning), #f9ab00);
+        }
+        
+        .promo-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        /* 工单列表 */
+        .ticket-list {
+            list-style: none;
+        }
+        
+        .ticket-item {
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .ticket-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .ticket-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        
+        .status-open {
+            background: #e6f4ea;
+            color: var(--accent);
+        }
+        
+        .status-pending {
+            background: #fef7e0;
+            color: var(--warning);
+        }
+        
+        .status-closed {
+            background: #fce8e6;
+            color: var(--danger);
+        }
+        
+        /* 用户信息 */
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            margin-right: 20px;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .user-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                padding: 10px 0;
+            }
+            
+            .nav-links {
+                margin: 15px 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .nav-links li {
+                margin: 5px;
+            }
+            
+            .config-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .promo-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .user-profile {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+        }
+        
+        /* 页面部分样式 */
+        .page-section {
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        /* 特性展示 */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .feature i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        /* 页脚样式 */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .footer-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 返回顶部按钮 */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 99;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <div class="navbar">
+                <a href="#home" class="logo">
+                    <i class="fas fa-cloud"></i>
+                    <span>星辰云计算</span>
+                </a>
+                
+                <ul class="nav-links">
+                    <li><a href="#home" class="active">首页</a></li>
+                    <li><a href="#server-config">云服务器</a></li>
+                    <li><a href="#promotions">活动</a></li>
+                    <li><a href="#tickets">工单</a></li>
+                    <li><a href="#user-center">用户中心</a></li>
+                    <li><a href="#verification">实名认证</a></li>
+                </ul>
+                
+                <div class="user-actions">
+                    <button class="btn btn-outline">登录</button>
+                    <button class="btn btn-primary">注册</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 英雄区域 -->
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>高性能云服务器租用平台</h1>
+            <p>灵活配置，按需付费，可用性保障，专业技术团队7×24小时支持</p>
+            <button class="btn btn-primary">立即体验</button>
+        </div>
+    </section>
+    
+    <!-- 主内容区 -->
+    <div class="container main-content">
+        <!-- 服务器配置 -->
+        <section id="server-config" class="page-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">基础云服务器配置</h2>
+                    <span><i class="fas fa-server"></i> 灵活配置，按需付费</span>
+                </div>
+                
+                <div class="config-options">
+                    <div class="option-group">
+                        <label class="option-label">CPU 核心数</label>
+                        <select class="select-box">
+                            <option>1 核</option>
+                            <option>2 核</option>
+                            <option selected>4 核</option>
+                            <option>8 核</option>
+                            <option>16 核</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label">内存</label>
+                        <select class="select-box">
+                            <option>1 GB</option>
+                            <option>2 GB</option>
+                            <option selected>4 GB</option>
+                            <option>8 GB</option>
+                            <option>16 GB</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label">系统盘</label>
+                        <select class="select-box">
+                            <option>40 GB SSD</option>
+                            <option selected>80 GB SSD</option>
+                            <option>160 GB SSD</option>
+                            <option>320 GB SSD</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label">操作系统</label>
+                        <select class="select-box">
+                            <option selected>CentOS 8</option>
+                            <option>Ubuntu 20.04</option>
+                            <option>Windows Server 2019</option>
+                            <option>Debian 10</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label">带宽</label>
+                        <select class="select-box">
+                            <option>1 Mbps</option>
+                            <option selected>5 Mbps</option>
+                            <option>10 Mbps</option>
+                            <option>100 Mbps</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label class="option-label">数据中心</label>
+                        <select class="select-box">
+                            <option>北京丰台</option>
+                            <option>上海徐汇</option>
+                            <option>广州天河</option>
+                            <option>香港离岛</option>
+                            <option>美国洛杉矶</option>
+                            <option>日本东京</option>
+                            <option>韩国首尔</option>
+                            <option>湖北襄阳</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="price-display">
+                    <div>预估价格</div>
+                    <div class="price">¥ 128<span class="period">/月</span></div>
+                    <button class="btn btn-primary">立即购买</button>
+                </div>
+            </div>
+            
+            <div class="features">
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <h3>高性能</h3>
+                    <p>采用最新一代Intel Xeon处理器，NVMe SSD存储</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>高安全性</h3>
+                    <p>多重安全防护，DDoS防护，免费SSL证书</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    <h3>弹性扩展</h3>
+                    <p>支持随时升级配置，满足业务增长需求</p>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-headset"></i>
+                    <h3>7×24支持</h3>
+                    <p>专业技术团队全天候提供技术支持</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 标签页内容 -->
+        <section id="tickets" class="page-section">
+            <h2 class="section-title">工单系统</h2>
+            
+            <div class="card">
+                <h3 class="section-title">提交工单</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">工单主题</label>
+                    <input type="text" class="form-input" placeholder="请简要描述问题">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">问题描述</label>
+                    <textarea class="form-input" placeholder="请详细描述您遇到的问题..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">问题类型</label>
+                    <select class="form-input">
+                        <option>请选择问题类型</option>
+                        <option>服务器问题</option>
+                        <option>网络问题</option>
+                        <option>账单问题</option>
+                        <option>其他问题</option>
+                    </select>
+                </div>
+                
+                <button class="btn btn-primary">提交工单</button>
+            </div>
+            
+            <div class="card">
+                <h3 class="section-title">我的工单</h3>
+                
+                <ul class="ticket-list">
+                    <li class="ticket-item">
+                        <div class="ticket-info">
+                            <span class="ticket-status status-open">无</span>
+                            <span>无</span>
+                        </div>
+                        <span>null</span>
+                    </li>
+                    
+                    <li class="ticket-item">
+                        <div class="ticket-info">
+                            <span class="ticket-status status-closed">无</span>
+                            <span>无</span>
+                        </div>
+                        <span>null</span>
+                    </li>
+                    
+                    <li class="ticket-item">
+                        <div class="ticket-info">
+                            <span class="ticket-status status-pending">无</span>
+                            <span>无</span>
+                        </div>
+                        <span>null</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- 用户中心 -->
+        <section id="user-center" class="page-section">
+            <h2 class="section-title">用户中心</h2>
+            
+            <div class="card">
+                <div class="user-profile">
+                    <div class="avatar">User</div>
+                    <div class="user-details">
+                        <div class="user-name">user963</div>
+                        <div>会员等级: 无</div>
+                        <div>注册时间: Null</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 class="section-title">我的服务</h3>
+                
+                <div class="form-group">
+                    <label class="form-label">当前运行实例</label>
+                    <div class="config-options">
+                        <div class="option-group">
+                            <div>无</div>
+                            <div class="option-label">离线</div>
+                        </div>
+                        
+                        <div class="option-group">
+                            <div>无</div>
+                            <div class="option-label">离线</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 class="section-title">消费记录</h3>
+                
+                <div class="form-group">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <th style="text-align: left; padding: 10px;">日期</th>
+                            <th style="text-align: left; padding: 10px;">产品</th>
+                            <th style="text-align: right; padding: 10px;">金额</th>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border);">
+                            <td style="padding: 10px;">2025-8-20</td>
+                            <td style="padding: 10px;">注册星辰云</td>
+                            <td style="padding: 10px; text-align: right;">¥0.0</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 优惠活动 -->
+        <section id="promotions" class="page-section">
+            <h2 class="section-title">优惠活动</h2>
+            
+            <div class="promo-cards">
+                <div class="promo-card">
+                    <div class="promo-title">新用户专享</div>
+                    <p>首单5折优惠，最高可省1000元</p>
+                    <p>活动时间: 永久</p>
+                </div>
+                
+                <div class="promo-card">
+                    <div class="promo-title">双十一特惠</div>
+                    <p>云服务器3折起，买一年送三个月</p>
+                    <p>活动时间: 永久</p>
+                </div>
+                
+                <div class="promo-card">
+                    <div class="promo-title">推荐有礼</div>
+                    <p>推荐好友成功订购，双方各得100元优惠券</p>
+                    <p>活动长期有效</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3 class="section-title">活动说明</h3>
+                <p>1. 新用户专享优惠仅限首次购买云服务器产品，订单金额满100元可用</p>
+                <p>2. 双十一特惠活动所有用户均可参与，特惠产品限购3台</p>
+                <p>3. 推荐有礼活动需好友通过您的专属链接注册并完成实名认证</p>
+                <p>4. 更多活动详情请咨询在线客服</p>
+            </div>
+        </section>
+        
+        <!-- 实名认证 -->
+        <section id="verification" class="page-section">
+            <h2 class="section-title">实名认证</h2>
+            
+            <div class="card">
+                <h3 class="section-title">实名认证</h3>
+                <p>根据国家相关规定，购买云服务器需完成实名认证</p>
+                
+                <div class="form-group">
+                    <label class="form-label">认证类型</label>
+                    <select class="form-input">
+                        <option>个人认证</option>
+                        <option>企业认证</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">姓名</label>
+                    <input type="text" class="form-input" placeholder="请输入真实姓名">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">身份证号</label>
+                    <input type="text" class="form-input" placeholder="请输入身份证号码">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">上传身份证照片</label>
+                    <input type="file" class="form-input">
+                    <div style="font-size: 12px; color: var(--gray); margin-top: 5px;">请上传身份证正反面照片</div>
+                </div>
+                
+                <button class="btn btn-primary">提交认证</button>
+            </div>
+            
+            <div class="card">
+                <h3 class="section-title">认证说明</h3>
+                <p>1. 我们承诺严格保护您的个人信息安全</p>
+                <p>2. 认证信息仅用于身份验证，不会用于其他用途</p>
+                <p>3. 认证审核通常在48小时内完成</p>
+                <p>4. 完成实名认证后可享受云服务</p>
+            </div>
+        </section>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>关于我们</h3>
+                    <p>星辰云是一家专业的云服务提供商，致力于为企业提供高性能、高可用的云计算服务。</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>产品服务</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">云服务器</a></li>
+                        <li><a href="#">云数据库</a></li>
+                        <li><a href="#">对象存储</a></li>
+                        <li><a href="#">CDN加速</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>帮助支持</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">文档中心</a></li>
+                        <li><a href="#">工单支持</a></li>
+                        <li><a href="#">常见问题</a></li>
+                        <li><a href="#">联系我们</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>联系我们</h3>
+                    <p>邮箱: StarStudio123@yeah.net</p>
+                    <p>地址: 上海浦东新区</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2025 星辰云 云服务提供商. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 返回顶部按钮 -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <script>
+        // 导航栏激活状态
+        const sections = document.querySelectorAll('.page-section');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 100)) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').substring(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+            
+            // 显示/隐藏返回顶部按钮
+            const backToTop = document.getElementById('backToTop');
+            if (window.scrollY > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+        });
+        
+        // 返回顶部功能
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 导航链接点击平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // 更新导航栏激活状态
+                    navLinks.forEach(link => link.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 平滑滚动到目标位置
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // 模拟配置变更时的价格变化
+        document.querySelectorAll('.select-box').forEach(select => {
+            select.addEventListener('change', () => {
+                const priceElement = document.querySelector('.price');
+                const currentPrice = parseInt(priceElement.textContent.replace('¥ ', ''));
+                // 随机生成一个价格变化（实际应用中应根据配置计算）
+                const newPrice = Math.floor(Math.random() * 100) + 100;
+                priceElement.textContent = `¥ ${newPrice}`;
+                
+                // 添加一个简单的动画效果
+                priceElement.style.transition = 'all 0.3s';
+                priceElement.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    priceElement.style.transform = 'scale(1)';
+                }, 300);
+            });
+        });
+    </script>
+</body>
+</html>
